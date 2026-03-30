@@ -1,0 +1,131 @@
+# ============================================================
+# System — atualização do sistema operacional e shell
+# ============================================================
+
+{{ if eq .chezmoi.osRelease.variantID "bluefin" -}}
+function upd-sys() {
+  echo -e "${COLOR_YELLOW}>>> Bluefin system update:${COLOR_RESET}"
+  ujust update
+}
+
+function cls-sys() {
+  echo -e "${COLOR_YELLOW}>>> Cleaning unused Flatpak runtimes:${COLOR_RESET}"
+  flatpak uninstall --unused -y
+  echo -e " "
+  echo -e "${COLOR_YELLOW}>>> Cleaning Homebrew cache:${COLOR_RESET}"
+  brew cleanup
+}
+-
+function upd-brew() {
+  echo -e "${COLOR_YELLOW}>>> Homebrew update:${COLOR_RESET}"
+  brew update && brew upgrade
+}
+
+function UpdateSystem() {
+  echo -e " "
+  echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}*> Update System (Bluefin / bootc) -----------------------------------------*${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
+  upd-sys
+  echo -e " "
+  echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}*> Update Homebrew ---------------------------------------------------------*${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
+  upd-brew
+  echo -e " "
+  echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}*> Clean Old Packages & Runtimes -------------------------------------------*${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
+  cls-sys
+  echo -e " "
+  echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}*> Update Oh-My-Zsh --------------------------------------------------------*${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
+  upd-omz
+}
+
+{{- else if eq .chezmoi.osRelease.id "fedora" -}}
+function upd-sys() {
+  echo -e "${COLOR_YELLOW}>>> dnf5 upgrade:${COLOR_RESET}"
+  sudo dnf5 upgrade -y
+}
+
+function cls-sys() {
+  echo -e "${COLOR_YELLOW}>>> dnf5 autoremove:${COLOR_RESET}"
+  sudo dnf5 autoremove -y
+}
+
+function UpdateSystem() {
+  echo -e " "
+  echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}*> Update System (Fedora) --------------------------------------------------*${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
+  upd-sys
+  echo -e " "
+  echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}*> Remove Old Packages -----------------------------------------------------*${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
+  cls-sys
+  echo -e " "
+  echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}*> Update Oh-My-Zsh --------------------------------------------------------*${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
+  upd-omz
+}
+
+{{- else -}}
+function upd-sys() {
+  echo -e "${COLOR_YELLOW}>>> [sudo] apt update:${COLOR_RESET}"
+  sudo apt update
+  echo -e " "
+  echo -e "${COLOR_YELLOW}>>> [sudo] apt upgrade:${COLOR_RESET}"
+  sudo apt upgrade -y
+}
+
+function cls-sys() {
+  echo -e "${COLOR_YELLOW}>>> [sudo] apt autoclean:${COLOR_RESET}"
+  sudo apt autoclean
+  echo -e " "
+  echo -e "${COLOR_YELLOW}>>> [sudo] apt autoremove:${COLOR_RESET}"
+  sudo apt autoremove -y
+}
+
+function UpdateSystem() {
+  echo -e " "
+  echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}*> Update System Packages (Ubuntu) ----------------------------------------*${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
+  upd-sys
+  echo -e " "
+  echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}*> Remove Old Packages -----------------------------------------------------*${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
+  cls-sys
+  echo -e " "
+  echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}*> Update Oh-My-Zsh --------------------------------------------------------*${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
+  upd-omz
+}
+{{- end }}
+
+function upd-omz() {
+  echo -e "${COLOR_YELLOW}>>> oh-my-zsh update:${COLOR_RESET}"
+  omz update
+}
+
+function RunUpdates() {
+  cl
+  echo -e "${COLOR_MAGENTA}*===========================================================================*${COLOR_RESET}"
+  {{ if eq .chezmoi.osRelease.variantID "bluefin" -}}
+  echo -e "${COLOR_MAGENTA}*             U p d a t e   B l u e f i n   S y s t e m                    *${COLOR_RESET}"
+  {{- else if eq .chezmoi.osRelease.id "fedora" -}}
+  echo -e "${COLOR_MAGENTA}*              U p d a t e   F e d o r a   S y s t e m                     *${COLOR_RESET}"
+  {{- else -}}
+  echo -e "${COLOR_MAGENTA}*              U p d a t e   U b u n t u   S y s t e m                     *${COLOR_RESET}"
+  {{- end }}
+  echo -e "${COLOR_MAGENTA}*===========================================================================*${COLOR_RESET}"
+  UpdateSystem
+  echo -e " "
+  echo -e "${COLOR_MAGENTA}*===========================================================================*${COLOR_RESET}"
+}

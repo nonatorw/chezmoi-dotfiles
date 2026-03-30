@@ -1,0 +1,32 @@
+[user]
+	name = Rodrick Unborn
+	email = 2484501+nonatorw@users.noreply.github.com
+
+{{- if eq .chezmoi.osRelease.variantID "bluefin" }}
+[credential]
+	helper = /usr/lib/git-core/git-credential-libsecret
+
+[gpg]
+	format = ssh
+
+[gpg "ssh"]
+	program = /usr/lib/1password/op-ssh-sign
+
+[commit]
+	gpgsign = true
+{{- else }}
+[credential]
+	helper = /mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager.exe
+
+[gpg]
+	format = ssh
+
+[gpg "ssh"]
+	program = /mnt/c/Users/nonatorw/AppData/Local/1Password/app/8/op-ssh-sign.exe
+
+[commit]
+	gpgsign = true
+{{- end }}
+
+[alias]
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit

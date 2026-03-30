@@ -1,0 +1,61 @@
+# ============================================================
+# Dev Configs — carregado pelo ~/.zshrc
+# ============================================================
+
+# --- Linger (mantém processos activos após logout) ----------
+# Apenas em sistemas com systemd nativo (não WSL Ubuntu)
+{{ if eq .chezmoi.osRelease.variantID "bluefin" -}}
+loginctl show-user "$(whoami)" 2>/dev/null | grep -q "Linger=yes" \
+  || loginctl enable-linger "$(whoami)"
+{{- else if eq .chezmoi.osRelease.id "fedora" -}}
+loginctl show-user "$(whoami)" 2>/dev/null | grep -q "Linger=yes" \
+  || loginctl enable-linger "$(whoami)"
+{{- end }}
+
+# --- SSH Agent (1Password) ----------------------------------
+{{ if eq .chezmoi.osRelease.variantID "bluefin" -}}
+export SSH_AUTH_SOCK=~/.1password/agent.sock
+{{- else -}}
+# 1Password SSH agent via Windows named pipe (WSL)
+export SSH_AUTH_SOCK=/mnt/c/Users/nonatorw/AppData/Roaming/1Password/agent.sock
+{{- end }}
+
+# --- Python: pyenv ------------------------------------------
+export PYENV_ROOT="$HOME/Dev/tools/python/pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init - zsh)"
+
+# --- Python: Poetry -----------------------------------------
+export POETRY_HOME="$HOME/Dev/tools/python/poetry"
+[[ ":$PATH:" != *":$POETRY_HOME/bin:"* ]] && export PATH="$POETRY_HOME/bin:$PATH"
+
+# --- Java: SDKman -------------------------------------------
+export SDKMAN_DIR="$HOME/Dev/tools/java/sdkman"
+export SDKMAN_CANDIDATES_API="${SDKMAN_CANDIDATES_API:-https://api.sdkman.io/2}"
+export SDKMAN_BROKER_API="${SDKMAN_BROKER_API:-https://broker.sdkman.io}"
+[[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+
+# --- Java: Gradle user home ---------------------------------
+export GRADLE_USER_HOME="$HOME/Dev/tools/java/gradle"
+
+# --- Java: Maven local repository ---------------------------
+export MAVEN_OPTS="${MAVEN_OPTS:+$MAVEN_OPTS }-Dmaven.repo.local=$HOME/Dev/tools/java/m2"
+
+# --- Node.js: npm cache -------------------------------------
+export NPM_CONFIG_CACHE="$HOME/Dev/tools/node/npm"
+
+# --- Node.js: NVM -------------------------------------------
+export NVM_DIR="$HOME/Dev/tools/node/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# --- AI: Claude Code ----------------------------------------
+export CLAUDE_HOME="$HOME/Dev/tools/ai/claude"
+[[ ":$PATH:" != *":$CLAUDE_HOME/bin:"* ]] && export PATH="$CLAUDE_HOME/bin:$PATH"
+
+# --- AI: Gemini CLI -----------------------------------------
+export GEMINI_HOME="$HOME/Dev/tools/ai/gemini"
+[[ ":$PATH:" != *":$GEMINI_HOME/bin:"* ]] && export PATH="$GEMINI_HOME/bin:$PATH"
+
+# --- User local bin -----------------------------------------
+[[ ":$PATH:" != *":$HOME/.local/bin:"* ]] && export PATH="$HOME/.local/bin:$PATH"

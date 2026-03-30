@@ -1,0 +1,79 @@
+# Ambiente de Desenvolvimento
+
+## Sistema
+{{ if eq .chezmoi.osRelease.variantID "bluefin" -}}
+- OS: Bluefin DX (Fedora Atomic / bootc) — portátil
+- Editor: VSCodium (aliasado como `code`)
+{{- else if eq .chezmoi.osRelease.id "fedora" -}}
+- OS: Fedora 43 (WSL2 / Windows 11)
+- Editor: VSCode (extensão WSL)
+{{- else -}}
+- OS: Ubuntu (WSL2 / Windows 11)
+- Editor: VSCode (extensão WSL)
+{{- end }}
+- Shell: zsh + Oh My Zsh + Powerlevel10k
+- Container runtime: Podman (aliasado como `docker`)
+- Gestor de passwords: 1Password com SSH agent integrado
+
+## Estrutura de diretórios
+```
+~/Dev/
+├── repos/                          # repositórios git
+└── tools/
+    ├── python/
+    │   ├── pyenv/                  # PYENV_ROOT
+    │   └── poetry/                 # POETRY_HOME
+    ├── node/
+    │   ├── nvm/                    # NVM_DIR
+    │   └── npm/                    # NPM_CONFIG_CACHE
+    ├── java/
+    │   ├── sdkman/                 # SDKMAN_DIR
+    │   ├── gradle/                 # GRADLE_USER_HOME
+    │   └── m2/                     # Maven local repository
+    └── ai/
+        ├── claude/                 # CLAUDE_HOME (binário)
+        ├── gemini/                 # GEMINI_HOME (binário)
+        └── gemini-config/          # ~/.gemini → symlink para cá
+```
+
+## Python
+- Gerenciador de versões: pyenv (`PYENV_ROOT=~/Dev/tools/python/pyenv`)
+- Versão padrão: última estável 3.x
+- Gerenciador de pacotes: Poetry (`POETRY_HOME=~/Dev/tools/python/poetry`)
+- Virtualenvs: dentro de cada projeto em `.venv` (`virtualenvs.in-project = true`)
+
+## Java / Kotlin
+- Gerenciador de SDKs: SDKman (`SDKMAN_DIR=~/Dev/tools/java/sdkman`)
+- Java: LTS mais recente (Temurin)
+- Build tools: Maven, Gradle (últimas versões estáveis via SDKman)
+- Maven local repo: `~/Dev/tools/java/m2`
+- Gradle user home: `~/Dev/tools/java/gradle`
+
+## Node.js
+- Gerenciador de versões: NVM (`NVM_DIR=~/Dev/tools/node/nvm`)
+- Versão padrão: LTS mais recente
+- npm cache: `~/Dev/tools/node/npm`
+
+## Ferramentas de IA
+- Claude Code (`CLAUDE_HOME=~/Dev/tools/ai/claude`) — instalado via npm --prefix
+- Gemini CLI (`GEMINI_HOME=~/Dev/tools/ai/gemini`) — instalado via npm --prefix
+- Config do Gemini: `~/Dev/tools/ai/gemini-config` (acessível via `~/.gemini` symlink)
+
+## Scripts de configuração
+Localizados em `~/.local/bin/`, carregados pelo `.zshrc`:
+- `aliases.sh` — aliases gerais + editor por sistema
+- `dev_configs.sh` — variáveis de ambiente e inicialização das ferramentas
+- `functions.sh` — loader dos módulos de functions/
+- `functions/system.sh` — atualização do sistema (específico por distro)
+- `functions/python.sh` — pyenv + Poetry
+- `functions/java.sh` — SDKman + Java + Maven + Gradle
+- `functions/node.sh` — NVM + Node.js
+- `functions/ai.sh` — Claude Code + Gemini CLI
+- `functions/utils.sh` — orquestradores (RunUpdates, RunDevUpdates, GetDevEnv, gig)
+
+## Preferências
+- Sem Docker — usar Podman (aliasado como `docker`)
+- Versões LTS para todos os SDKs
+- Virtualenvs sempre dentro do projeto (`.venv`)
+- Commits em inglês, mensagens descritivas
+- Commits assinados via 1Password SSH agent
