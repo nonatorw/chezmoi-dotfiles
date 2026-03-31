@@ -2,7 +2,7 @@
 # System — atualização do sistema operacional e shell
 # ============================================================
 
-{{ if eq .chezmoi.osRelease.variantID "bluefin" -}}
+{{ if hasPrefix .chezmoi.osRelease.variantID "bluefin" -}}
 function upd-sys() {
   echo -e "${COLOR_YELLOW}>>> Bluefin system update:${COLOR_RESET}"
   ujust update
@@ -15,7 +15,7 @@ function cls-sys() {
   echo -e "${COLOR_YELLOW}>>> Cleaning Homebrew cache:${COLOR_RESET}"
   brew cleanup
 }
--
+
 function upd-brew() {
   echo -e "${COLOR_YELLOW}>>> Homebrew update:${COLOR_RESET}"
   brew update && brew upgrade
@@ -24,7 +24,7 @@ function upd-brew() {
 function UpdateSystem() {
   echo -e " "
   echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
-  echo -e "${COLOR_CYAN}*> Update System (Bluefin / bootc) -----------------------------------------*${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}*> Update System (Bluefin / bootc) ----------------------------------------*${COLOR_RESET}"
   echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
   upd-sys
   echo -e " "
@@ -93,7 +93,7 @@ function cls-sys() {
 function UpdateSystem() {
   echo -e " "
   echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
-  echo -e "${COLOR_CYAN}*> Update System Packages (Ubuntu) ----------------------------------------*${COLOR_RESET}"
+  echo -e "${COLOR_CYAN}*> Update System Packages --------------------------------------------------*${COLOR_RESET}"
   echo -e "${COLOR_CYAN}*---------------------------------------------------------------------------*${COLOR_RESET}"
   upd-sys
   echo -e " "
@@ -117,12 +117,12 @@ function upd-omz() {
 function RunUpdates() {
   cl
   echo -e "${COLOR_MAGENTA}*===========================================================================*${COLOR_RESET}"
-  {{ if eq .chezmoi.osRelease.variantID "bluefin" -}}
-  echo -e "${COLOR_MAGENTA}*             U p d a t e   B l u e f i n   S y s t e m                    *${COLOR_RESET}"
+  {{ if hasPrefix .chezmoi.osRelease.variantID "bluefin" -}}
+  echo -e "${COLOR_MAGENTA}*              U p d a t e   B l u e f i n   S y s t e m                   *${COLOR_RESET}"
   {{- else if eq .chezmoi.osRelease.id "fedora" -}}
   echo -e "${COLOR_MAGENTA}*              U p d a t e   F e d o r a   S y s t e m                     *${COLOR_RESET}"
   {{- else -}}
-  echo -e "${COLOR_MAGENTA}*              U p d a t e   U b u n t u   S y s t e m                     *${COLOR_RESET}"
+  echo -e "${COLOR_MAGENTA}*                  U p d a t e   W S L   -   S y s t e m                    *${COLOR_RESET}"
   {{- end }}
   echo -e "${COLOR_MAGENTA}*===========================================================================*${COLOR_RESET}"
   UpdateSystem

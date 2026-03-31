@@ -1,8 +1,7 @@
 [user]
 	name = Rodrick Unborn
 	email = 2484501+nonatorw@users.noreply.github.com
-
-{{- if eq .chezmoi.osRelease.variantID "bluefin" }}
+{{- if hasPrefix .chezmoi.osRelease.variantID "bluefin" }}
 [credential]
 	helper = /usr/lib/git-core/git-credential-libsecret
 
@@ -27,6 +26,5 @@
 [commit]
 	gpgsign = true
 {{- end }}
-
 [alias]
 	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit

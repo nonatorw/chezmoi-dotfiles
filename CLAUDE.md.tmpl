@@ -1,7 +1,7 @@
 # Ambiente de Desenvolvimento
 
 ## Sistema
-{{ if eq .chezmoi.osRelease.variantID "bluefin" -}}
+{{ if hasPrefix .chezmoi.osRelease.variantID "bluefin" -}}
 - OS: Bluefin DX (Fedora Atomic / bootc) — portátil
 - Editor: VSCodium (aliasado como `code`)
 {{- else if eq .chezmoi.osRelease.id "fedora" -}}
@@ -19,6 +19,7 @@
 ```
 ~/Dev/
 ├── repos/                          # repositórios git
+│   └── nonatorw-dotfiles/          # dotfiles (bootstrap + configs)
 └── tools/
     ├── python/
     │   ├── pyenv/                  # PYENV_ROOT
@@ -41,18 +42,19 @@
 - Versão padrão: última estável 3.x
 - Gerenciador de pacotes: Poetry (`POETRY_HOME=~/Dev/tools/python/poetry`)
 - Virtualenvs: dentro de cada projeto em `.venv` (`virtualenvs.in-project = true`)
+- Ao criar projetos Python: `pyenv local <versão>` + `poetry init`
 
 ## Java / Kotlin
 - Gerenciador de SDKs: SDKman (`SDKMAN_DIR=~/Dev/tools/java/sdkman`)
 - Java: LTS mais recente (Temurin)
 - Build tools: Maven, Gradle (últimas versões estáveis via SDKman)
-- Maven local repo: `~/Dev/tools/java/m2`
-- Gradle user home: `~/Dev/tools/java/gradle`
+- Maven local repo: `~/Dev/tools/java/m2` (via `MAVEN_OPTS` + `settings.xml`)
+- Gradle user home: `~/Dev/tools/java/gradle` (via `GRADLE_USER_HOME`)
 
 ## Node.js
 - Gerenciador de versões: NVM (`NVM_DIR=~/Dev/tools/node/nvm`)
 - Versão padrão: LTS mais recente
-- npm cache: `~/Dev/tools/node/npm`
+- npm cache: `~/Dev/tools/node/npm` (via `NPM_CONFIG_CACHE`)
 
 ## Ferramentas de IA
 - Claude Code (`CLAUDE_HOME=~/Dev/tools/ai/claude`) — instalado via npm --prefix
@@ -61,18 +63,18 @@
 
 ## Scripts de configuração
 Localizados em `~/.local/bin/`, carregados pelo `.zshrc`:
-- `aliases.sh` — aliases gerais + editor por sistema
+- `aliases.sh` — aliases gerais
 - `dev_configs.sh` — variáveis de ambiente e inicialização das ferramentas
-- `functions.sh` — loader dos módulos de functions/
+- `functions.sh` — loader dos módulos abaixo
 - `functions/system.sh` — atualização do sistema (específico por distro)
 - `functions/python.sh` — pyenv + Poetry
 - `functions/java.sh` — SDKman + Java + Maven + Gradle
-- `functions/node.sh` — NVM + Node.js
+- `functions/node.sh` — NVM + Node.js (upd-nvm, upd-node)
 - `functions/ai.sh` — Claude Code + Gemini CLI
 - `functions/utils.sh` — orquestradores (RunUpdates, RunDevUpdates, GetDevEnv, gig)
 
 ## Preferências
-- Sem Docker — usar Podman (aliasado como `docker`)
+- Sem Docker — usar Podman
 - Versões LTS para todos os SDKs
 - Virtualenvs sempre dentro do projeto (`.venv`)
 - Commits em inglês, mensagens descritivas

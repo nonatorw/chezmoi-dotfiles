@@ -2,9 +2,8 @@
 # Dev Configs — carregado pelo ~/.zshrc
 # ============================================================
 
-# --- Linger (mantém processos activos após logout) ----------
-# Apenas em sistemas com systemd nativo (não WSL Ubuntu)
-{{ if eq .chezmoi.osRelease.variantID "bluefin" -}}
+# --- Linger (mantém processos ativos após logout no Linux) --
+{{ if hasPrefix .chezmoi.osRelease.variantID "bluefin" -}}
 loginctl show-user "$(whoami)" 2>/dev/null | grep -q "Linger=yes" \
   || loginctl enable-linger "$(whoami)"
 {{- else if eq .chezmoi.osRelease.id "fedora" -}}
@@ -13,7 +12,7 @@ loginctl show-user "$(whoami)" 2>/dev/null | grep -q "Linger=yes" \
 {{- end }}
 
 # --- SSH Agent (1Password) ----------------------------------
-{{ if eq .chezmoi.osRelease.variantID "bluefin" -}}
+{{ if hasPrefix .chezmoi.osRelease.variantID "bluefin" -}}
 export SSH_AUTH_SOCK=~/.1password/agent.sock
 {{- else -}}
 # 1Password SSH agent via Windows named pipe (WSL)
@@ -57,5 +56,10 @@ export CLAUDE_HOME="$HOME/Dev/tools/ai/claude"
 export GEMINI_HOME="$HOME/Dev/tools/ai/gemini"
 [[ ":$PATH:" != *":$GEMINI_HOME/bin:"* ]] && export PATH="$GEMINI_HOME/bin:$PATH"
 
-# --- User local bin -----------------------------------------
+# --- User local bin (binários instalados pelo usuário) ------
 [[ ":$PATH:" != *":$HOME/.local/bin:"* ]] && export PATH="$HOME/.local/bin:$PATH"
+
+# --- Homebrew (Bluefin DX) ----------------------------------
+{{ if hasPrefix .chezmoi.osRelease.variantID "bluefin" -}}
+export HOMEBREW_GIT_PATH="$(brew --prefix)/bin/git"
+{{- end }}
