@@ -61,5 +61,6 @@ export GEMINI_HOME="$HOME/Dev/tools/ai/gemini"
 
 # --- Homebrew (Bluefin DX) ----------------------------------
 {{ if or (eq .chezmoi.osRelease.variantID "bluefin") (eq .chezmoi.osRelease.variantID "bluefin-dx") -}}
-export HOMEBREW_GIT_PATH="$(brew --prefix)/bin/git"
+export HOMEBREW_GIT_PATH="/home/linuxbrew/.linuxbrew/bin/git"
+[[ ":$PATH:" != *":/home/linuxbrew/.linuxbrew/bin:"* ]] && export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH"
 {{- end }}
