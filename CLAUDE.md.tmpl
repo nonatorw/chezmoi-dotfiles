@@ -1,7 +1,7 @@
 # Ambiente de Desenvolvimento
 
 ## Sistema
-{{ if hasPrefix .chezmoi.osRelease.variantID "bluefin" -}}
+{{ if or (eq .chezmoi.osRelease.variantID "bluefin") (eq .chezmoi.osRelease.variantID "bluefin-dx") -}}
 - OS: Bluefin DX (Fedora Atomic / bootc) — portátil
 - Editor: VSCodium (aliasado como `code`)
 {{- else if eq .chezmoi.osRelease.id "fedora" -}}

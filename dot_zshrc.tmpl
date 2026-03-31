@@ -72,7 +72,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-{{ if hasPrefix .chezmoi.osRelease.variantID "bluefin" -}}
+{{ if or (eq .chezmoi.osRelease.variantID "bluefin") (eq .chezmoi.osRelease.variantID "bluefin-dx") -}}
 # On Bluefin, plugins installed via Homebrew are not in $ZSH_CUSTOM/plugins/.
 # We source them directly from Homebrew's prefix before loading Oh My Zsh.
 BREW_PREFIX="$(brew --prefix)"
@@ -86,7 +86,7 @@ source "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-{{ if hasPrefix .chezmoi.osRelease.variantID "bluefin" -}}
+{{ if or (eq .chezmoi.osRelease.variantID "bluefin") (eq .chezmoi.osRelease.variantID "bluefin-dx") -}}
 plugins=(
          colored-man-pages
          colorize

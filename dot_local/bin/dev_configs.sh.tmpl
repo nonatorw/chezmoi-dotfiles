@@ -3,7 +3,7 @@
 # ============================================================
 
 # --- Linger (mantém processos ativos após logout no Linux) --
-{{ if hasPrefix .chezmoi.osRelease.variantID "bluefin" -}}
+{{ if or (eq .chezmoi.osRelease.variantID "bluefin") (eq .chezmoi.osRelease.variantID "bluefin-dx") -}}
 loginctl show-user "$(whoami)" 2>/dev/null | grep -q "Linger=yes" \
   || loginctl enable-linger "$(whoami)"
 {{- else if eq .chezmoi.osRelease.id "fedora" -}}
@@ -12,7 +12,7 @@ loginctl show-user "$(whoami)" 2>/dev/null | grep -q "Linger=yes" \
 {{- end }}
 
 # --- SSH Agent (1Password) ----------------------------------
-{{ if hasPrefix .chezmoi.osRelease.variantID "bluefin" -}}
+{{ if or (eq .chezmoi.osRelease.variantID "bluefin") (eq .chezmoi.osRelease.variantID "bluefin-dx") -}}
 export SSH_AUTH_SOCK=~/.1password/agent.sock
 {{- else -}}
 # 1Password SSH agent via Windows named pipe (WSL)
@@ -60,6 +60,6 @@ export GEMINI_HOME="$HOME/Dev/tools/ai/gemini"
 [[ ":$PATH:" != *":$HOME/.local/bin:"* ]] && export PATH="$HOME/.local/bin:$PATH"
 
 # --- Homebrew (Bluefin DX) ----------------------------------
-{{ if hasPrefix .chezmoi.osRelease.variantID "bluefin" -}}
+{{ if or (eq .chezmoi.osRelease.variantID "bluefin") (eq .chezmoi.osRelease.variantID "bluefin-dx") -}}
 export HOMEBREW_GIT_PATH="$(brew --prefix)/bin/git"
 {{- end }}

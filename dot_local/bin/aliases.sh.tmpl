@@ -1,5 +1,5 @@
 # Aliases
-{{ if hasPrefix .chezmoi.osRelease.variantID "bluefin" -}}
+{{ if or (eq .chezmoi.osRelease.variantID "bluefin") (eq .chezmoi.osRelease.variantID "bluefin-dx") -}}
 alias home-config="codium ~"            # Opens the user's home folder in VSCodium.
 alias omz-config="codium ~/.oh-my-zsh"  # Opens the Oh-My-Zsh configuration file in VSCodium.
 alias zsh-config="codium ~/.zshrc"      # Opens the Zsh session configuration file in VSCodium.

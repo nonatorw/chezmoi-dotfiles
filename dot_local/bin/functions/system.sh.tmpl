@@ -2,7 +2,7 @@
 # System — atualização do sistema operacional e shell
 # ============================================================
 
-{{ if hasPrefix .chezmoi.osRelease.variantID "bluefin" -}}
+{{ if or (eq .chezmoi.osRelease.variantID "bluefin") (eq .chezmoi.osRelease.variantID "bluefin-dx") -}}
 function upd-sys() {
   echo -e "${COLOR_YELLOW}>>> Bluefin system update:${COLOR_RESET}"
   ujust update
@@ -117,7 +117,7 @@ function upd-omz() {
 function RunUpdates() {
   cl
   echo -e "${COLOR_MAGENTA}*===========================================================================*${COLOR_RESET}"
-  {{ if hasPrefix .chezmoi.osRelease.variantID "bluefin" -}}
+  {{ if or (eq .chezmoi.osRelease.variantID "bluefin") (eq .chezmoi.osRelease.variantID "bluefin-dx") -}}
   echo -e "${COLOR_MAGENTA}*              U p d a t e   B l u e f i n   S y s t e m                   *${COLOR_RESET}"
   {{- else if eq .chezmoi.osRelease.id "fedora" -}}
   echo -e "${COLOR_MAGENTA}*              U p d a t e   F e d o r a   S y s t e m                     *${COLOR_RESET}"
