@@ -1,14 +1,7 @@
 # Aliases
-{{ if or (eq .chezmoi.osRelease.variantID "bluefin") (eq .chezmoi.osRelease.variantID "bluefin-dx") -}}
-alias home-config="codium ~"            # Opens the user's home folder in VSCodium.
-alias omz-config="codium ~/.oh-my-zsh"  # Opens the Oh-My-Zsh configuration file in VSCodium.
-alias zsh-config="codium ~/.zshrc"      # Opens the Zsh session configuration file in VSCodium.
-alias code="codium"                     # VSCodium aliasado como code para compatibilidade.
-{{- else -}}
-alias home-config="code ~"              # Opens the user's home folder in VSCode.
-alias omz-config="code ~/.oh-my-zsh"    # Opens the Oh-My-Zsh configuration file in VSCode.
-alias zsh-config="code ~/.zshrc"        # Opens the Zsh session configuration file in VSCode.
-{{- end }}
+alias home-config="code ~"            # Opens the user's home folder in VScode.
+alias omz-config="code ~/.oh-my-zsh"  # Opens the Oh-My-Zsh configuration file in VScode.
+alias zsh-config="code ~/.zshrc"      # Opens the Zsh session configuration file in VScode.
 alias omz-source="source ~/.oh-my-zsh"  # Applies changes to the Oh-My-Zsh configuration file.
 alias zsh-source="source ~/.zshrc"      # Applies changes to the Zsh session configuration file.
 
