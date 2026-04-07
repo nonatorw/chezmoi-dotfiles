@@ -1,9 +1,10 @@
 # ============================================================
 # Dev Configs — carregado pelo ~/.zshrc
 # ============================================================
+{{- $variantID := index .chezmoi.osRelease "variantID" | default "" }}
 
 # --- Linger (mantém processos ativos após logout no Linux) --
-{{ if or (eq .chezmoi.osRelease.variantID "bluefin") (eq .chezmoi.osRelease.variantID "bluefin-dx") -}}
+{{ if or (eq $variantID "bluefin") (eq $variantID "bluefin-dx") -}}
 loginctl show-user "$(whoami)" 2>/dev/null | grep -q "Linger=yes" \
   || loginctl enable-linger "$(whoami)"
 {{- else if eq .chezmoi.osRelease.id "fedora" -}}
@@ -12,7 +13,7 @@ loginctl show-user "$(whoami)" 2>/dev/null | grep -q "Linger=yes" \
 {{- end }}
 
 # --- SSH Agent (1Password) ----------------------------------
-{{ if or (eq .chezmoi.osRelease.variantID "bluefin") (eq .chezmoi.osRelease.variantID "bluefin-dx") -}}
+{{ if or (eq $variantID "bluefin") (eq $variantID "bluefin-dx") -}}
 export SSH_AUTH_SOCK=~/.1password/agent.sock
 {{- else -}}
 # 1Password SSH agent via Windows named pipe (WSL)
@@ -58,5 +59,3 @@ export GEMINI_HOME="$HOME/Dev/tools/ai/gemini"
 
 # --- User local bin (binários instalados pelo usuário) ------
 [[ ":$PATH:" != *":$HOME/.local/bin:"* ]] && export PATH="$HOME/.local/bin:$PATH"
-
-
