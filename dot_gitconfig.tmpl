@@ -1,7 +1,8 @@
 [user]
 	name = Rodrick Unborn
 	email = 2484501+nonatorw@users.noreply.github.com
-{{- if or (eq .chezmoi.osRelease.variantID "bluefin") (eq .chezmoi.osRelease.variantID "bluefin-dx") }}
+{{- $variantID := index .chezmoi.osRelease "variantID" | default "" -}}
+{{- if or (eq $variantID "bluefin") (eq $variantID "bluefin-dx") }}
 [credential]
 	helper = /usr/lib/git-core/git-credential-libsecret
 
@@ -13,7 +14,7 @@
 
 [commit]
 	gpgsign = true
-{{- else }}
+{{- else if eq .chezmoi.os "windows" }}
 [credential]
 	helper = /mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager.exe
 
@@ -25,6 +26,9 @@
 
 [commit]
 	gpgsign = true
+{{- else }}
+[credential]
+	helper = /usr/lib/git-core/git-credential-libsecret
 {{- end }}
 [alias]
 	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
