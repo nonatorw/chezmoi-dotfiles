@@ -29,6 +29,9 @@ eval "$(pyenv init - zsh)"
 export POETRY_HOME="$HOME/Dev/tools/python/poetry"
 [[ ":$PATH:" != *":$POETRY_HOME/bin:"* ]] && export PATH="$POETRY_HOME/bin:$PATH"
 
+# --- Python: UV ---------------------------------------------
+export UV_PYTHON_PREFERENCE=managed
+
 # --- Java: SDKman -------------------------------------------
 export SDKMAN_DIR="$HOME/Dev/tools/java/sdkman"
 export SDKMAN_CANDIDATES_API="${SDKMAN_CANDIDATES_API:-https://api.sdkman.io/2}"
