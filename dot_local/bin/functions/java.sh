@@ -7,7 +7,10 @@ function upd-java-env() {
   sdk selfupdate && echo -e " "
 
   echo -e "${COLOR_YELLOW}>>> sdkman update:${COLOR_RESET}"
-  sdk update
+  sdk update && echo -e " "
+
+  echo -e "${COLOR_YELLOW}>>> sdkman upgrade:${COLOR_RESET}"
+  sdk upgrade
 }
 
 function get-java-env() {
