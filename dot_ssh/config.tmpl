@@ -1,0 +1,10 @@
+{{- $variantID := index .chezmoi.osRelease "variantID" | default "" -}}
+Host *
+{{- if or (eq $variantID "bluefin") (eq $variantID "bluefin-dx") }}
+  IdentityAgent ~/.1password/agent.sock
+{{- else if .chezmoi.kernel.osrelease | lower | contains "microsoft" }}
+  IdentityAgent ~/.ssh/1password-agent.sock
+{{- else }}
+  IdentityAgent ~/.1password/agent.sock
+{{- end }}
+  AddKeysToAgent yes

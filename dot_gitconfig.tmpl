@@ -18,14 +18,12 @@
 [core]
 	editor = code --wait
 {{- else if .chezmoi.kernel.osrelease | lower | contains "microsoft" }}
-[credential]
-	helper = /mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager.exe
-
 [gpg]
 	format = ssh
 
 [gpg "ssh"]
-	program = /mnt/c/Users/nonatorw/AppData/Local/1Password/app/8/op-ssh-sign.exe
+	program = /mnt/c/Users/nonat/AppData/Local/Microsoft/WindowsApps/op-ssh-sign-wsl.exe
+	defaultKeyCommand = ssh-add -L
 
 [commit]
 	gpgsign = true

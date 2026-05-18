@@ -15,9 +15,18 @@ loginctl show-user "$(whoami)" 2>/dev/null | grep -q "Linger=yes" \
 # --- SSH Agent (1Password) ----------------------------------
 {{ if or (eq $variantID "bluefin") (eq $variantID "bluefin-dx") -}}
 export SSH_AUTH_SOCK=~/.1password/agent.sock
+{{- else if .chezmoi.kernel.osrelease | lower | contains "microsoft" -}}
+# WSL2: relay do named pipe do 1Password Desktop via npiperelay + socat
+export SSH_AUTH_SOCK="$HOME/.ssh/1password-agent.sock"
+_NPIPERELAY="/mnt/c/Users/nonat/AppData/Local/Microsoft/WinGet/Links/npiperelay.exe"
+if [[ -x "$_NPIPERELAY" ]] && ! [[ -S "$SSH_AUTH_SOCK" ]]; then
+  rm -f "$SSH_AUTH_SOCK"
+  setsid socat UNIX-LISTEN:"$SSH_AUTH_SOCK",fork \
+    EXEC:"$_NPIPERELAY -ei -s //./pipe/openssh-ssh-agent",nofork &>/dev/null &
+fi
+unset _NPIPERELAY
 {{- else -}}
-# 1Password SSH agent via Windows named pipe (WSL)
-export SSH_AUTH_SOCK=/mnt/c/Users/nonatorw/AppData/Roaming/1Password/agent.sock
+export SSH_AUTH_SOCK=~/.1password/agent.sock
 {{- end }}
 
 # --- Python: pyenv ------------------------------------------
