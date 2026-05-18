@@ -14,7 +14,10 @@
 
 [commit]
 	gpgsign = true
-{{- else if eq .chezmoi.os "windows" }}
+
+[core]
+	editor = code --wait
+{{- else if .chezmoi.kernel.osrelease | lower | contains "microsoft" }}
 [credential]
 	helper = /mnt/c/Program\ Files/Git/mingw64/bin/git-credential-manager.exe
 
@@ -26,9 +29,15 @@
 
 [commit]
 	gpgsign = true
+
+[core]
+	editor = code --wait
 {{- else }}
 [credential]
 	helper = /usr/lib/git-core/git-credential-libsecret
+
+[core]
+	editor = code --wait
 {{- end }}
 [alias]
 	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
