@@ -12,11 +12,11 @@ function RunDevUpdates() {
   cl
   echo -e "${COLOR_MAGENTA}*===========================================================================*${COLOR_RESET}"
   {{ if or (eq $variantID "bluefin") (eq $variantID "bluefin-dx") -}}
-  echo -e "${COLOR_MAGENTA}*               U p d a t e   B l u e f i n   -   D e v E n v                *${COLOR_RESET}"
+  echo -e "${COLOR_MAGENTA}*               ( B l u e f i n )   U p d a t e   D e v E n v               *${COLOR_RESET}"
   {{- else if eq .chezmoi.osRelease.id "fedora" -}}
-  echo -e "${COLOR_MAGENTA}*               U p d a t e   F e d o r a   -   D e v E n v                  *${COLOR_RESET}"
+  echo -e "${COLOR_MAGENTA}*                ( F e d o r a )   U p d a t e   D e v E n v                *${COLOR_RESET}"
   {{- else -}}
-  echo -e "${COLOR_MAGENTA}*                   U p d a t e   W S L   -   D e v E n v                    *${COLOR_RESET}"
+  echo -e "${COLOR_MAGENTA}*                   ( W S L )   U p d a t e   D e v E n v                   *${COLOR_RESET}"
   {{- end }}
   echo -e "${COLOR_MAGENTA}*===========================================================================*${COLOR_RESET}"
   echo -e " "
