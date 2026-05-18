@@ -7,6 +7,13 @@ Intended to be applied automatically by
 [linux-init-bootstrap](https://github.com/nonatorw/linux-init-bootstrap), which clones this
 repo and runs `chezmoi apply` as part of its bootstrap sequence.
 
+> ## ATTENTION
+> **Pending verification:** The `setup-python`, `setup-dotfiles`, and `setup-ai` recipes in
+> `bluefin-template` have been updated but not yet tested on a live Fedora Bluefin machine.
+>
+> See [nonatorw/bluefin-template](https://github.com/nonatorw/bluefin-template)
+> docs for further details.
+
 ## What this manages
 
 | Path                                       | Description                                        |
