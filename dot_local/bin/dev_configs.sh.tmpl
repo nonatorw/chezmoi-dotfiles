@@ -1,9 +1,9 @@
 # ============================================================
-# Dev Configs — carregado pelo ~/.zshrc
+# Dev Configs — loaded by ~/.zshrc
 # ============================================================
 {{- $variantID := index .chezmoi.osRelease "variantID" | default "" }}
 
-# --- Linger (mantém processos ativos após logout no Linux) --
+# --- Linger (keep processes alive after logout on Linux) ----
 {{ if or (eq $variantID "bluefin") (eq $variantID "bluefin-dx") -}}
 loginctl show-user "$(whoami)" 2>/dev/null | grep -q "Linger=yes" \
   || loginctl enable-linger "$(whoami)"
@@ -16,15 +16,6 @@ loginctl show-user "$(whoami)" 2>/dev/null | grep -q "Linger=yes" \
 {{ if or (eq $variantID "bluefin") (eq $variantID "bluefin-dx") -}}
 export SSH_AUTH_SOCK=~/.1password/agent.sock
 {{- else if .chezmoi.kernel.osrelease | lower | contains "microsoft" -}}
-# WSL2: relay do named pipe do 1Password Desktop via npiperelay + socat
-export SSH_AUTH_SOCK="$HOME/.ssh/1password-agent.sock"
-_NPIPERELAY="/mnt/c/Users/nonat/AppData/Local/Microsoft/WinGet/Links/npiperelay.exe"
-if [[ -x "$_NPIPERELAY" ]] && ! [[ -S "$SSH_AUTH_SOCK" ]]; then
-  rm -f "$SSH_AUTH_SOCK"
-  setsid socat UNIX-LISTEN:"$SSH_AUTH_SOCK",fork \
-    EXEC:"$_NPIPERELAY -ei -s //./pipe/openssh-ssh-agent",nofork &>/dev/null &
-fi
-unset _NPIPERELAY
 {{- else -}}
 export SSH_AUTH_SOCK=~/.1password/agent.sock
 {{- end }}
@@ -71,5 +62,5 @@ export CLAUDE_HOME="$HOME/Dev/tools/ai/claude"
 export GEMINI_HOME="$HOME/Dev/tools/ai/gemini"
 [[ ":$PATH:" != *":$GEMINI_HOME/bin:"* ]] && export PATH="$GEMINI_HOME/bin:$PATH"
 
-# --- User local bin (binários instalados pelo usuário) ------
+# --- User local bin -----------------------------------------
 [[ ":$PATH:" != *":$HOME/.local/bin:"* ]] && export PATH="$HOME/.local/bin:$PATH"

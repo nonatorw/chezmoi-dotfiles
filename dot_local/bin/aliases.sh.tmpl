@@ -1,4 +1,10 @@
 # Aliases
+{{- if .chezmoi.kernel.osrelease | lower | contains "microsoft" }}
+# WSL2: use Windows SSH executables directly to integrate with 1Password Desktop agent
+alias ssh='ssh.exe'
+alias ssh-add='ssh-add.exe'
+alias op='op.exe'
+{{ end }}
 alias home-config="code ~"              # Opens the user's home folder in VSCode.
 alias omz-config="code ~/.oh-my-zsh"    # Opens the Oh-My-Zsh configuration file in VSCode.
 alias omz-source="source ~/.oh-my-zsh"  # Applies changes to the Oh-My-Zsh configuration file.

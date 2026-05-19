@@ -1,6 +1,8 @@
 [user]
 	name = Rodrick Unborn
 	email = 2484501+nonatorw@users.noreply.github.com
+	signingKey = {{ .signingKey }}
+
 {{- $variantID := index .chezmoi.osRelease "variantID" | default "" -}}
 {{- if or (eq $variantID "bluefin") (eq $variantID "bluefin-dx") }}
 [credential]
@@ -17,19 +19,23 @@
 
 [core]
 	editor = code --wait
+
 {{- else if .chezmoi.kernel.osrelease | lower | contains "microsoft" }}
+{{- $opsign := output "bash" "-c" "find /mnt/c/Users/*/AppData/Local/Microsoft/WindowsApps -maxdepth 1 -name op-ssh-sign-wsl.exe 2>/dev/null | head -1 || find /mnt/c/Program\\ Files/1Password -name op-ssh-sign-wsl.exe 2>/dev/null | head -1" | trim }}
 [gpg]
 	format = ssh
 
 [gpg "ssh"]
-	program = /mnt/c/Users/nonat/AppData/Local/Microsoft/WindowsApps/op-ssh-sign-wsl.exe
-	defaultKeyCommand = ssh-add -L
+	program = {{ $opsign }}
+	defaultKeyCommand = ssh-add.exe -L
 
 [commit]
 	gpgsign = true
 
 [core]
 	editor = code --wait
+	sshCommand = ssh.exe
+
 {{- else }}
 [credential]
 	helper = /usr/lib/git-core/git-credential-libsecret
@@ -37,5 +43,6 @@
 [core]
 	editor = code --wait
 {{- end }}
+
 [alias]
 	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit

@@ -1,0 +1,5 @@
+sourceDir = "{{ .chezmoi.sourceDir }}"
+
+[data]
+{{- $signingKey := promptStringOnce . "signingKey" "SSH signing key (public key, e.g. from: ssh-add -L)" }}
+  signingKey = {{ $signingKey | quote }}
