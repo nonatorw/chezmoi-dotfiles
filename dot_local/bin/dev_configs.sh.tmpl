@@ -20,19 +20,11 @@ export SSH_AUTH_SOCK=~/.1password/agent.sock
 export SSH_AUTH_SOCK=~/.1password/agent.sock
 {{- end }}
 
-# --- Python: pyenv ------------------------------------------
-export PYENV_ROOT="$HOME/Dev/tools/python/pyenv"
-if [[ -x "$PYENV_ROOT/bin/pyenv" ]]; then
-  [[ ":$PATH:" != *":$PYENV_ROOT/bin:"* ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-  eval "$("$PYENV_ROOT/bin/pyenv" init - zsh)"
-fi
-
-# --- Python: Poetry -----------------------------------------
-export POETRY_HOME="$HOME/Dev/tools/python/poetry"
-[[ ":$PATH:" != *":$POETRY_HOME/bin:"* ]] && export PATH="$POETRY_HOME/bin:$PATH"
-
-# --- Python: UV ---------------------------------------------
+# --- Python: uv ---------------------------------------------
+export UV_INSTALL_DIR="$HOME/Dev/tools/python/uv/bin"
+export UV_PYTHON_INSTALL_DIR="$HOME/Dev/tools/python/versions"
 export UV_PYTHON_PREFERENCE=managed
+[[ ":$PATH:" != *":$UV_INSTALL_DIR:"* ]] && export PATH="$UV_INSTALL_DIR:$PATH"
 
 # --- Java: SDKman -------------------------------------------
 export SDKMAN_DIR="$HOME/Dev/tools/java/sdkman"
